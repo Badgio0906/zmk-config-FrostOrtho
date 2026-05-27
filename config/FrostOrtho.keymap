@@ -1,75 +1,81 @@
 #include <input/processors.dtsi>
-#include <behaviors/runtime-sensor-rotate.dtsi>
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
-#include <behaviors/runtime-sensor-rotate.dtsi>
-
-#define MOUSE 6
 
 &mt {
     flavor = "balanced";
     quick-tap-ms = <0>;
 };
 
-// AML クリックしたときにタイムアウトを延長
-&mkp_input_listener { input-processors = <&zip_temp_layer 6 10000>; };
+&mkp_input_listener { input-processors = <&zip_temp_layer 4 10000>; };
 
 / {
-    combos { compatible = "zmk,combos"; };
+    combos {
+        compatible = "zmk,combos";
 
-    macros {
-        to_layer_0: to_layer_0 {
-            compatible = "zmk,behavior-macro-one-param";
-            #binding-cells = <1>;
-            bindings = <&to 0 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
-            label = "TO_LAYER_0";
+        Alt_tab {
+            bindings = <&kp LA(TAB)>;
+            key-positions = <12 13>;
         };
 
-        screenshot: screenshot {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-                <&to 7>,
-                <&macro_press>,
-                <&kp LEFT_WIN &kp LEFT_SHIFT &kp S>,
-                <&macro_release>,
-                <&kp LEFT_WIN &kp LEFT_SHIFT &kp S>;
+        Ctrl_Z {
+            bindings = <&kp LC(Z)>;
+            key-positions = <12 11>;
+        };
 
-            label = "SCREENSHOT";
+        Ctrl_P {
+            bindings = <&kp LC(P)>;
+            key-positions = <14 13>;
         };
     };
 
     behaviors {
-        lt_to_layer_0: lt_to_layer_0 {
-            compatible = "zmk,behavior-hold-tap";
-            label = "LAYER_TAP_TO_0";
-            bindings = <&mo>, <&to_layer_0>;
+        tdPeriodComma: tdPeriodComma {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TDPERIODCOMMA";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp PERIOD>;
+        };
 
-            #binding-cells = <2>;
-            tapping-term-ms = <300>;
+        tdWandF: tdWandF {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TDWANDF";
+            #binding-cells = <0>;
+            bindings = <&kp W>, <&kp F>;
+            tapping-term-ms = <150>;
         };
-        // Kyemap Editor用
-        scroll_up_down: behavior_sensor_rotate_mouse_wheel_up_down {
-            compatible = "zmk,behavior-sensor-rotate";
-            #sensor-binding-cells = <0>;
-            tap-ms = <20>;
-            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
+
+        PlusMinus: PlusMinus {
+            compatible = "zmk,behavior-tap-dance";
+            label = "PLUSMINUS";
+            #binding-cells = <0>;
+            bindings = <&kp LS(SEMI)>, <&kp MINUS>;
+            tapping-term-ms = <200>;
         };
-        vol_up_down: vol_up_down {
-            compatible = "zmk,behavior-sensor-rotate";
-            #sensor-binding-cells = <0>;
-            tap-ms = <5>;
-            bindings = <&kp C_VOL_DN>, <&kp C_VOL_UP>;
+
+        AsteriskSlash: AsteriskSlash {
+            compatible = "zmk,behavior-tap-dance";
+            label = "ASTERISKSLASH";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LS(SINGLE_QUOTE)>, <&kp SLASH>;
         };
-        // DYA Studio用
-        rsr_vol: rsr_vol {
-            compatible = "zmk,behavior-runtime-sensor-rotate";
-            #sensor-binding-cells = <0>;
-            tap-ms = <5>;
-            cw-binding = <&kp C_VOL_DN>;
-            ccw-binding = <&kp C_VOL_UP>;
+
+        ColonSemicolon: ColonSemicolon {
+            compatible = "zmk,behavior-tap-dance";
+            label = "COLONSEMICOLON";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp APOS>, <&kp SEMI>;
+        };
+
+        TdLang1Lang2: TdLang1Lang2 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TDLANG1LANG2";
+            #binding-cells = <0>;
+            bindings = <&kp LANGUAGE_1>, <&kp LANG2>;
         };
     };
 
@@ -77,91 +83,80 @@
         compatible = "zmk,keymap";
 
         default_layer {
-            bindings = <
-&kp Q                 &kp W         &kp E         &kp R             &kp T                         &kp Y        &kp U          &kp I      &kp O         &kp P
-&kp A                 &kp S         &kp D         &kp F             &kp G                         &kp H        &kp J          &kp K      &kp L         &lt 5 MINUS
-&mt LEFT_SHIFT Z      &kp X         &kp C         &kp V             &kp B                         &kp N        &kp M          &kp COMMA  &kp PERIOD    &lt 7 SLASH
-&mt LEFT_CONTROL TAB  &kp LEFT_WIN  &kp LEFT_ALT  &lt 7 LANG_HANJA  &lt 2 SPACE  &lt 3 LANG1      &lt 1 ENTER  &kp BACKSPACE  &trans     &lt 4 F10     &mt RIGHT_SHIFT INTERNATIONAL_1
+            bindings = 
+&kp Q           &kp L          &kp U         &kp LC(C)       &kp LC(V)                           &TdLang1Lang2    &tdWandF         &kp R   &kp Y   &kp P
+&tdPeriodComma  &kp I          &kp A         &kp O           &kp MINUS                           &kp K            &kp T            &kp N   &kp S   &kp H
+&kp Z           &kp X          &kp C         &kp E           &kp V                               &kp G            &kp D            &kp M   &kp J   &kp B
+&kp ESC         &mt LCTRL TAB  &kp LEFT_ALT  &kp LEFT_SHIFT  &kp BACKSPACE  &lt 1 SPACE          &lt 3 ENTER      &kp RIGHT_SHIFT  &trans  &trans  &kp DEL
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        layer_1 {
-            bindings = <
-&trans  &trans  &trans  &trans  &trans              &kp F1  &kp F2   &kp F3  &kp F4   &kp F5
-&trans  &trans  &trans  &trans  &trans              &kp F6  &kp F7   &kp F8  &kp F9   &kp F10
-&trans  &trans  &trans  &trans  &trans              &trans  &trans   &trans  &kp F11  &kp F12
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &kp DEL  &trans  &trans   &kp ESCAPE
+        FUNCTION {
+            bindings = 
+&trans   &trans   &trans  &trans  &trans              &kp LS(BACKSLASH)  &kp N7  &kp N8  &kp N9  &PlusMinus
+&kp F1   &kp F2   &kp F3  &kp F4  &kp F5              &kp LEFT_BRACKET   &kp N4  &kp N5  &kp N6  &AsteriskSlash
+&kp F6   &kp F7   &kp F8  &kp F9  &kp F10             &ColonSemicolon    &kp N1  &kp N2  &kp N3  &kp N0
+&kp F11  &kp F12  &trans  &trans  &trans  &trans       &kp RIGHT_SHIFT    &kp RIGHT_ALT  &trans  &trans  &none
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        layer_2 {
-            bindings = <
-&kp SLASH                   &kp N7     &kp N8  &kp N9  &kp LS(SQT)                    &kp LS(NUMBER_3)  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)      &kp LS(NUMBER_6)   &kp LEFT_BRACKET
-&kp MINUS                   &kp N4     &kp N5  &kp N6  &kp LS(SEMICOLON)              &kp LS(N2)        &kp LS(N7)        &kp LS(LEFT_BRACKET)  &kp LS(NUMBER_8)   &kp LS(NUMBER_9)
-&mt LEFT_SHIFT N0           &kp N1     &kp N2  &kp N3  &kp PERIOD                     &kp SEMICOLON     &kp SQT           &kp LS(INT_YEN)       &kp RIGHT_BRACKET  &kp BACKSLASH
-&mt LEFT_CONTROL LS(MINUS)  &kp ENTER  &trans  &trans  &trans             &trans      &trans            &trans            &trans                &kp LS(NUMBER_1)   &kp EQUAL
+        NUM {
+            bindings = 
+&kp MINUS                   &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp PLUS              &kp CARET          &kp AMPERSAND      &kp TILDE       &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS
+&kp SLASH                   &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp ASTERISK          &kp EXCLAMATION    &kp AT_SIGN        &kp HASH        &kp DOLLAR            &kp PERCENT
+&mt LEFT_SHIFT KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp PERIOD            &kp LEFT_BRACKET   &kp RIGHT_BRACKET  &kp LEFT_BRACE  &kp RIGHT_BRACE       &kp BACKSLASH
+&trans                      &trans           &trans           &trans           &trans     &trans      &trans             &trans             &trans          &trans                &kp PIPE
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        layer_3 {
-            bindings = <
-&kp ESCAPE      &trans          &kp UP_ARROW    &trans           &trans              &trans  &trans  &trans  &trans  &trans
-&kp HOME        &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp END             &trans  &trans  &trans  &trans  &trans
-&kp LEFT_SHIFT  &trans          &trans          &trans           &trans              &trans  &trans  &trans  &trans  &trans
-&trans          &trans          &trans          &trans           &trans  &trans      &trans  &trans  &trans  &trans  &trans
+        ARROW {
+            bindings = 
+&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW    &kp ASTERISK             &kp LEFT_PARENTHESIS              &trans  &trans  &trans  &trans  &trans
+&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW  &kp RIGHT_ARROW          &kp END               &trans      &trans  &trans  &trans  &trans  &trans
+&kp LEFT_SHIFT  &kp LG(LS(LEFT_ARROW))  &trans          &kp LG(LS(RIGHT_ARROW))  &trans                &trans      &trans  &trans  &trans  &trans  &trans
+&trans          &trans                  &trans          &trans                   &trans     &trans      &trans      &trans  &trans  &trans  &kp RCTRL
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp LC(PAGE_UP) LC(PAGE_DOWN)>;
         };
 
-        layer_4 {
-            bindings = <
-&trans  &trans  &trans  &trans  &trans              &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&trans  &trans  &trans  &trans  &trans              &trans          &trans        &trans        &trans        &trans
-&trans  &trans  &trans  &trans  &trans              &studio_unlock  &trans        &trans        &trans        &bt BT_CLR
-&trans  &trans  &trans  &trans  &trans  &trans      &trans          &trans        &trans        &trans        &bt BT_CLR_ALL
+        MOUSE {
+            bindings = 
+&trans  &trans  &trans  &trans  &trans              &trans  &trans    &trans    &trans    &trans
+&trans  &trans  &trans  &trans  &trans              &trans  &mkp MB1  &mkp MB3  &mkp MB2  &trans
+&trans  &trans  &trans  &trans  &trans              &trans  &trans    &trans    &trans    &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans    &trans    &trans    &trans
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        layer_5 {
-            bindings = <
+        SCROLL {
+            bindings = 
 &trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        MOUSE {
-            bindings = <
-&trans  &trans  &trans  &trans  &trans              &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans
-&trans  &trans  &trans  &trans  &trans              &trans  &trans    &trans    &trans    &trans
-&trans  &trans  &trans  &trans  &trans              &trans  &trans    &trans    &trans    &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans    &trans    &trans    &trans
+        layer_6 {
+            bindings = 
+&trans  &trans        &trans        &trans        &trans              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+&trans  &trans        &trans        &trans        &trans              &trans        &trans        &trans        &trans        &trans
+&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans              &trans        &trans        &trans        &trans        &bt BT_CLR
+&trans  &trans        &trans        &trans        &trans  &trans      &trans        &trans        &trans        &trans        &bt BT_CLR_ALL
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
-        };
-
-        layer_7 {
-            bindings = <
-&kp LC(Z)  &kp LC(Y)    &trans       &trans       &trans              &trans  &trans  &trans  &trans  &trans
-&trans     &trans       &trans       &trans       &trans              &trans  &trans  &trans  &trans  &trans
-&trans     &screenshot  &kp LC(INS)  &kp LS(INS)  &trans              &trans  &trans  &trans  &trans  &trans
-&trans     &trans       &trans       &trans       &trans  &trans      &trans  &trans  &trans  &trans  &trans
-            >;
-
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
     };
 };
