@@ -19,19 +19,6 @@
         ;
 };
 
-&zip_temp_layer {
-    // キー入力後400ms以内はAMLに切り替わらない
-    require-prior-idle-ms = <400>;
-    // AMLから離脱しないキー
-    excluded-positions = <
-        6 // U 左クリック
-        7 // I 右クリック
-        8 // O 中央クリック
-        20 // Z Shift
-        30 // Control
-        32 // Alt
-    >;
-};
 
 / {
     input_processors {
@@ -61,7 +48,7 @@
         // input-processors = <&mouse_runtime_input_processor>;
         input-processors = <
     // &mouse_runtime_input_processor
-        &zip_temp_layer 6 100000
+        &zip_temp_layer 6 500
         &zip_xy_scaler 2 3
         &zip_xy_transform INPUT_TRANSFORM_X_INVERT
         &zip_xy_transform INPUT_TRANSFORM_Y_INVERT

@@ -27,7 +27,7 @@ manifest:
     # DYA Studio モジュール
     - name: zmk-module-ble-management
       remote: cormoran
-      revision: main
+      revision: zmk-v0.3.0.0  # v0.3-branch+dya互換ブランチ
     - name: zmk-module-battery-history
       remote: cormoran
       revision: main
@@ -36,7 +36,7 @@ manifest:
       revision: main
     - name: zmk-module-runtime-input-processor
       remote: cormoran
-      revision: main
+      revision: dbf92f764de8b6ffd60bf5850514302875fe2570  # last v0.3-compatible (before migrate-to-v4 on 2026-05-30)
     - name: zmk-behavior-runtime-sensor-rotate
       remote: cormoran
       revision: main
